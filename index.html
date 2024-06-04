@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fashion Slider</title>
+    <link
+      rel="stylesheet"
+      href="./scss/main.css?ver=5.6.3"
+      type="text/css"
+      media="all"
+    />
+    <style>
+      .loaderWrap {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background-color: #a3dadb;
+        transition: all 0.5s ease-in-out;
+      }
+
+      .dom-loaded .loaderWrap {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loaderWrap"></div>
+    <main class="SliderTemplate">
+      <div class="sliderWrap">
+        <div class="slide">
+          <div class="imgBox">
+            <img
+              src="https://fashion-slider.uiinitiative.com/images/yeeze.jpg"
+              loading="lazy"
+              alt=""
+            />
+          </div>
+          <div class="title">
+            <h2>Yeeze</h2>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="imgBox">
+            <img
+              src="https://fashion-slider.uiinitiative.com/images/puma.jpg"
+              loading="lazy"
+              alt=""
+            />
+          </div>
+          <div class="title">
+            <h2>Puma</h2>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="imgBox">
+            <img
+              src="https://fashion-slider.uiinitiative.com/images/nike.jpg"
+              loading="lazy"
+              alt=""
+            />
+          </div>
+          <div class="title">
+            <h2>Nike</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="sliderNav">
+        <div class="nav left">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 350 160 90">
+            <g class="fashion-slider-svg-wrap">
+              <g class="fashion-slider-svg-circle-wrap">
+                <circle cx="42" cy="42" r="40"></circle>
+              </g>
+              <path
+                class="fashion-slider-svg-arrow"
+                d="M.983,6.929,4.447,3.464.983,0,0,.983,2.482,3.464,0,5.946Z"
+              ></path>
+              <path class="fashion-slider-svg-line" d="M80,0H0"></path>
+            </g>
+          </svg>
+        </div>
+        <div class="nav right">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 350 160 90">
+            <g class="fashion-slider-svg-wrap">
+              <g class="fashion-slider-svg-circle-wrap">
+                <circle cx="42" cy="42" r="40"></circle>
+              </g>
+              <path
+                class="fashion-slider-svg-arrow"
+                d="M.983,6.929,4.447,3.464.983,0,0,.983,2.482,3.464,0,5.946Z"
+              ></path>
+              <path class="fashion-slider-svg-line" d="M80,0H0"></path>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
+    integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script>
+    let slides = document.querySelectorAll('.slide'),
+      preBtn = document.querySelector('.nav.left'),
+      nextBtn = document.querySelector('.nav.right')
+    const APG = {
+      activeIndex: 0,
+      bgColorList: ['#d7a594', '#9b89c5', '#9fa051'],
+
+      slideChange: () => {
+        if (APG.activeIndex == 0) preBtn.classList.add('disabled')
+        else preBtn.classList.remove('disabled')
+
+        if (APG.activeIndex != slides.length - 1)
+          nextBtn.classList.remove('disabled')
+        else nextBtn.classList.add('disabled')
+      },
+
+      sliderInit: () => {
+        APG.slideChange()
+
+        slides.forEach((slide, index) => {
+          if (index != APG.activeIndex) {
+            gsap
+              .timeline()
+              .set(slide, {
+                x: '100%',
+              })
+              .set(slide.querySelector('.title'), {
+                x: '100%',
+                color: '#fff0',
+              })
+              .set(slide.querySelector('.imgBox'), {
+                scale: 0.6,
+              })
+          }
+        })
+        nextBtn.addEventListener('click', () => {
+          let nextIndex = 0
+
+          if (APG.activeIndex != slides.length - 1) {
+            nextIndex = APG.activeIndex + 1
+
+            gsap
+              .timeline()
+              .addLabel('start', 0)
+              .to(
+                document.querySelector('body'),
+                {
+                  duration: 0.65,
+
+                  backgroundColor: APG.bgColorList[APG.activeIndex],
+                },
+                'start'
+              )
+              .to(
+                slides[APG.activeIndex].querySelector('.imgBox'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  scale: 0.6,
+                },
+                'start'
+              )
+              .to(
+                slides[APG.activeIndex],
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  x: '-100%',
+                  //  skewX: '-10',
+                },
+                'start+=.8'
+              )
+              .to(
+                slides[APG.activeIndex].querySelector('.title'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  color: '#fff0',
+                },
+                'start'
+              )
+              .to(
+                slides[APG.activeIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  x: '-200%',
+                  skewX: '-10',
+                },
+                'start+=.65'
+              )
+
+            //next slide in
+
+            gsap
+              .timeline()
+              .addLabel('start', 0.8)
+              .to(
+                slides[nextIndex],
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+
+                  x: 0,
+                },
+                'start'
+              )
+              .to(
+                document.querySelector('body'),
+                {
+                  duration: 0.65,
+
+                  backgroundColor: APG.bgColorList[nextIndex],
+                },
+                'start'
+              )
+              .to(
+                slides[nextIndex].querySelector('.imgBox'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+                  scale: 1,
+                  //  skewX: '-10',
+                },
+                'start+=1.3'
+              )
+              .to(
+                slides[nextIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  color: '#fff0',
+                  x: 0,
+                  skewX: 0,
+                },
+                'start'
+              )
+              .to(
+                slides[nextIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+                  color: '#fff',
+                },
+                'start+=1.3'
+              )
+
+            // Active slide
+            APG.activeIndex += 1
+            APG.slideChange()
+          }
+        })
+
+        preBtn.addEventListener('click', () => {
+          let preIndex = 0
+
+          if (APG.activeIndex != 0) {
+            preIndex = APG.activeIndex - 1
+
+            gsap
+              .timeline()
+              .addLabel('start', 0)
+              .to(
+                slides[APG.activeIndex].querySelector('.imgBox'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  scale: 0.6,
+                },
+                'start'
+              )
+              .to(
+                document.querySelector('body'),
+                {
+                  duration: 0.65,
+
+                  backgroundColor: APG.bgColorList[APG.activeIndex],
+                },
+                'start'
+              )
+              .to(
+                slides[APG.activeIndex],
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  x: '100%',
+                  //  skewX: '-10',
+                },
+                'start+=.8'
+              )
+              .to(
+                slides[APG.activeIndex].querySelector('.title'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  color: '#fff0',
+                },
+                'start'
+              )
+              .to(
+                slides[APG.activeIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+
+                  x: '200%',
+                  skewX: '10',
+                },
+                'start+=.65'
+              )
+
+            //pre slide in
+
+            gsap
+              .timeline()
+              .addLabel('start', 0.8)
+              .to(
+                slides[preIndex],
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+
+                  x: 0,
+                },
+                'start'
+              )
+              .to(
+                document.querySelector('body'),
+                {
+                  duration: 0.65,
+
+                  backgroundColor: APG.bgColorList[preIndex],
+                },
+                'start'
+              )
+              .to(
+                slides[preIndex].querySelector('.imgBox'),
+                {
+                  duration: 0.65,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+                  scale: 1,
+                  //  skewX: '-10',
+                },
+                'start+=1.3'
+              )
+              .to(
+                slides[preIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  color: '#fff0',
+                  x: 0,
+                  skewX: 0,
+                },
+                'start'
+              )
+              .to(
+                slides[preIndex].querySelector('.title'),
+                {
+                  duration: 1.3,
+                  ease: 'cubic-bezier(.5,0,0,1)',
+                  opacity: 1,
+                  color: '#fff',
+                },
+                'start+=1.3'
+              )
+
+            // Active slide
+            APG.activeIndex -= 1
+            APG.slideChange()
+          }
+        })
+      },
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      APG.sliderInit()
+      setTimeout(() => {
+        document.body.classList.add('dom-loaded')
+      }, 50)
+    })
+  </script>
+</html>

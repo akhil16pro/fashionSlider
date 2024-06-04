@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  font-family: sans-serif;
+}
+
+main {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+
+  position: relative;
+}
+.SliderTemplate {
+}
+
+.sliderWrap {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.slide {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  .imgBox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .title {
+    position: relative;
+    z-index: 10;
+    color: #fff;
+    font-size: 5vw;
+    // text-transform: uppercase;
+    -webkit-text-stroke: 2px #fff;
+    > * {
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+}
+
+.sliderNav {
+  position: absolute;
+  left: 2vw;
+  top: 0;
+  width: calc(100% - 4vw);
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  .nav {
+    width: 140px;
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: 0.5s;
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      cursor: auto;
+    }
+
+    &:not(.disabled):hover {
+      circle {
+        stroke-dasharray: 4px;
+        stroke-dashoffset: 4px;
+        opacity: 1;
+      }
+      .fashion-slider-svg-arrow {
+        transform: rotateY(180deg) translate(-40px, 36.1px) scale(1.75);
+      }
+      .fashion-slider-svg-line {
+        transform: translate(35px, 42px) scaleX(0.5);
+      }
+    }
+
+    &.right {
+      svg {
+        transform: scale(-1, 1);
+      }
+    }
+  }
+  circle {
+    transition: 0.5s;
+    stroke-width: 2px;
+    stroke: #fff;
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 1;
+    transform-origin: 0px 0px 0px;
+  }
+  .fashion-slider-svg-wrap {
+    transform: translateY(353px);
+  }
+  .fashion-slider-svg-circle-wrap {
+    transition: 0.5s;
+    transform-origin: -20px 40px;
+    opacity: 1;
+  }
+  .fashion-slider-svg-arrow {
+    transition: 0.5s;
+    fill: #fff;
+    transform: rotateY(180deg) translate(-55px, 36.1px) scale(1.75);
+  }
+  .fashion-slider-svg-line {
+    transition: 0.5s;
+    stroke: #fff;
+    stroke-width: 2;
+    transform: translate(50px, 42px);
+  }
+}
